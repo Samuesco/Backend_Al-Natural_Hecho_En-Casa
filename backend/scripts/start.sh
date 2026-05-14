@@ -1,5 +1,4 @@
 #!/bin/sh
-#!/bin/sh
 
 echo "Esperando MySQL..."
 
@@ -13,28 +12,9 @@ echo "Sincronizando schema..."
 
 npx prisma db push
 
-echo "Verificando base de datos..."
+echo "Ejecutando seed..."
 
-TABLES=$(mysql \
--h mysql \
--u root \
--proot \
--D natural_products \
--sse "SHOW TABLES;")
-
-if [ -z "$TABLES" ]; then
-
-    echo "Base de datos vacía"
-
-    echo "Ejecutando seed..."
-
-    npm run seed
-
-else
-
-    echo "Base de datos ya inicializada"
-
-fi
+npm run seed
 
 echo "Iniciando backend..."
 
