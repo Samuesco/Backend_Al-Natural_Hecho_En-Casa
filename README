@@ -1,0 +1,489 @@
+# Backend — Al Natural
+
+Backend principal del sistema Al Natural encargado de la administración de:
+
+- productos
+- ingredientes
+- recipientes
+- recetas
+- costos
+- usuarios
+- backups
+- restauración del sistema
+
+La aplicación fue desarrollada utilizando Node.js, Express, Prisma ORM, MySQL y Docker.
+
+---
+
+# Tecnologías Utilizadas
+
+- Node.js
+- Express
+- Prisma ORM
+- MySQL 8
+- Docker
+- Docker Compose
+- JWT
+- Winston
+- Node Cron
+
+---
+
+# Requisitos Previos
+
+Antes de ejecutar el proyecto es necesario instalar:
+
+- Docker
+- Docker Compose
+
+---
+
+# Instalación — Windows
+
+## 1. Instalar Docker Desktop
+
+Descargar desde:
+
+https://www.docker.com/products/docker-desktop/
+
+---
+
+## 2. Instalar WSL2
+
+Abrir PowerShell como administrador y ejecutar:
+
+```powershell
+wsl --install
+```
+
+Reiniciar el equipo después de finalizar la instalación.
+
+---
+
+## 3. Verificar Virtualización
+
+Verificar desde BIOS que estén habilitados:
+
+- Intel VT-x
+- AMD-V
+
+---
+
+## 4. Verificar Instalación Docker
+
+Abrir PowerShell y ejecutar:
+
+```bash
+docker --version
+```
+
+y:
+
+```bash
+docker compose version
+```
+
+---
+
+## 5. Iniciar Docker Desktop
+
+Docker Desktop debe permanecer iniciado antes de levantar el proyecto.
+
+Verificar que Docker esté funcionando:
+
+```bash
+docker ps
+```
+
+---
+
+# Instalación — Linux (Ubuntu/Debian)
+
+## 1. Actualizar Sistema
+
+```bash
+sudo apt update
+```
+
+---
+
+## 2. Instalar Docker
+
+```bash
+sudo apt install docker.io docker-compose -y
+```
+
+---
+
+## 3. Iniciar Servicio Docker
+
+```bash
+sudo systemctl start docker
+```
+
+---
+
+## 4. Habilitar Inicio Automático Docker
+
+```bash
+sudo systemctl enable docker
+```
+
+---
+
+## 5. Verificar Instalación
+
+```bash
+docker --version
+```
+
+y:
+
+```bash
+docker compose version
+```
+
+---
+
+## 6. Verificar Estado Docker
+
+```bash
+sudo systemctl status docker
+```
+
+En Linux no es necesario mantener una aplicación gráfica abierta como Docker Desktop. Docker funciona como servicio del sistema.
+
+---
+
+# Instalación — MacOS
+
+## 1. Instalar Docker Desktop
+
+Descargar desde:
+
+https://www.docker.com/products/docker-desktop/
+
+---
+
+## 2. Verificar Instalación
+
+```bash
+docker --version
+```
+
+---
+
+## 3. Iniciar Docker Desktop
+
+Docker Desktop debe permanecer iniciado antes de ejecutar el proyecto.
+
+---
+
+# Clonar Proyecto
+
+```bash
+git clone URL_REPOSITORIO
+
+cd backend
+```
+
+---
+
+# Levantar Proyecto
+
+Construir e iniciar el sistema:
+
+```bash
+docker compose up -d --build
+```
+
+---
+
+# Verificar Contenedores
+
+```bash
+docker ps
+```
+
+---
+
+# Apagar Sistema
+
+```bash
+docker compose down
+```
+
+---
+
+# Reiniciar Base de Datos Completa
+
+Elimina completamente contenedores y volumen MySQL:
+
+```bash
+docker compose down -v
+```
+
+---
+
+# Acceso API
+
+Backend disponible en:
+
+```text
+http://localhost:3000
+```
+
+---
+
+# Healthcheck
+
+Verificar estado del backend:
+
+```http
+GET /health
+```
+
+Ejemplo:
+
+```text
+http://localhost:3000/health
+```
+
+---
+
+# Variables de Entorno
+
+Las configuraciones principales del sistema se encuentran en:
+
+```text
+.env
+```
+
+Variables importantes:
+
+- MYSQL_HOST
+- MYSQL_PORT
+- MYSQL_DATABASE
+- JWT_SECRET
+- SMTP_HOST
+- SMTP_USER
+- SMTP_PASS
+
+---
+
+# Sistema de Backups
+
+## Generar Backup Manual
+
+```bash
+npm run backup
+```
+
+Los backups se almacenan en:
+
+```text
+backend/backups/
+```
+
+---
+
+## Restaurar Backup
+
+```bash
+npm run restore nombre_backup.sql.gz
+```
+
+Ejemplo:
+
+```bash
+npm run restore 2026-05-14_backup.sql.gz
+```
+
+---
+
+# Automatización de Backups
+
+El sistema ejecuta automáticamente:
+
+- backups mensuales
+- limpieza automática de backups antiguos
+
+Utilizando:
+
+- node-cron
+- mysqldump
+- gzip
+
+---
+
+# Logs Persistentes
+
+Los logs se almacenan en:
+
+```text
+backend/logs/
+```
+
+Archivos principales:
+
+```text
+combined.log
+error.log
+```
+
+---
+
+# Estructura Principal
+
+```text
+backend/
+
+├── backups/
+├── logs/
+├── prisma/
+├── scripts/
+├── src/
+├── docker-compose.yml
+├── Dockerfile
+├── package.json
+```
+
+---
+
+# Arquitectura General
+
+## prisma/
+
+Contiene:
+- schema Prisma
+- migraciones
+- procedimientos SQL
+
+---
+
+## scripts/
+
+Contiene:
+- backups
+- restore
+- inicialización Docker
+
+---
+
+## src/
+
+Código fuente principal del backend.
+
+---
+
+## routes/
+
+Define todos los endpoints HTTP de la API.
+
+---
+
+## services/
+
+Centraliza lógica de negocio.
+
+---
+
+## middlewares/
+
+Protección JWT y manejo global de errores.
+
+---
+
+# Seguridad Implementada
+
+El backend actualmente incorpora:
+
+- JWT Authentication
+- Helmet
+- Rate Limiting
+- Password Hashing con bcrypt
+- Protección de rutas privadas
+- Logs persistentes
+
+---
+
+# Funcionalidades Principales
+
+- autenticación JWT
+- recuperación de contraseña
+- administración productos
+- recetas dinámicas
+- cálculo automático de costos
+- gestión de recipientes
+- backups automáticos
+- restauración automática
+- logs persistentes
+- healthchecks
+- automatización Docker
+
+---
+
+# Rutas Principales
+
+## Auth
+
+```text
+/api/auth
+```
+
+---
+
+## Productos
+
+```text
+/api/productos
+```
+
+---
+
+## Ingredientes
+
+```text
+/api/ingredientes
+```
+
+---
+
+## Recipientes
+
+```text
+/api/recipientes
+```
+
+---
+
+## Usuarios
+
+```text
+/api/usuarios
+```
+
+---
+
+## Administración Sistema
+
+```text
+/api/system
+```
+
+---
+
+# Notas Importantes
+
+- En Windows y MacOS Docker Desktop debe permanecer iniciado.
+- En Linux Docker funciona como servicio del sistema.
+- El sistema inicializa automáticamente Prisma y MySQL.
+- El seed inicial se ejecuta automáticamente si la base de datos está vacía.
+- Los backups se generan comprimidos utilizando `.sql.gz`.
+- El backend fue diseñado para facilitar continuidad futura del proyecto.
+
+---
+
+# Autor
+
+Proyecto desarrollado para Al Natural.

@@ -1,0 +1,45 @@
+{
+  "name": "backend",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "dev": "nodemon src/server.js",
+    "start": "node src/server.js",
+    "seed": "node prisma/seed.js",
+    "prisma:generate": "prisma generate",
+    "prisma:push": "prisma db push",
+    "reset": "prisma db push --force-reset && npm run seed",
+    "test": "echo \"No tests configured\" && exit 0",
+    "backup": "node scripts/backup.js",
+    "restore": "node scripts/restore.js"
+  },
+  "prisma": {
+    "seed": "node prisma/seed.js"
+  },
+  "keywords": [],
+  "author": "sa.escobarl7@gmail.com",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "@prisma/client": "6.15.0",
+    "bcrypt": "6.0.0",
+    "cors": "2.8.6",
+    "dotenv": "17.4.2",
+    "express": "5.2.1",
+    "express-rate-limit": "^8.5.2",
+    "helmet": "^8.1.0",
+    "jsonwebtoken": "9.0.3",
+    "mysql2": "3.22.3",
+    "node-cron": "^4.2.1",
+    "nodemailer": "8.0.7",
+    "prisma": "6.15.0",
+    "winston": "^3.19.0"
+  },
+  "devDependencies": {
+    "nodemon": "3.1.14"
+  },
+  "engines": {
+    "node": "22.22.2",
+    "npm": "10.x"
+  }
+}

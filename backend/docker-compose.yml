@@ -1,0 +1,103 @@
+services:
+
+  backend:
+
+    build: .
+
+    container_name: backend_api
+
+    restart: unless-stopped
+
+    ports:
+
+      - "3000:3000"
+
+    env_file:
+
+      - ./.env
+
+    volumes:
+
+      - .:/app
+
+      - /app/node_modules
+
+      - ./backups:/app/backups
+
+      - ./logs:/app/logs
+
+    depends_on:
+
+      mysql:
+
+        condition: service_healthy
+
+    healthcheck:
+
+      test: ["CMD", "curl", "-f", "http://localhost:3000/health"]
+
+      interval: 30s
+
+      timeout: 10s
+
+      retries: 5
+
+      start_period: 30s
+
+    command: sh ./scripts/start.sh
+
+
+
+  mysql:
+
+    image: mysql:8
+
+    container_name: backend_mysql
+
+    restart: unless-stopped
+
+    ports:
+
+      - "3307:3306"
+
+    environment:
+
+      MYSQL_ROOT_PASSWORD: root
+
+      MYSQL_DATABASE: productos_naturales
+
+    volumes:
+
+      - mysql_data:/var/lib/mysql
+
+    healthcheck:
+
+      test: [
+
+        "CMD",
+
+        "mysqladmin",
+
+        "ping",
+
+        "-h",
+
+        "localhost",
+
+        "-uroot",
+
+        "-proot"
+
+      ]
+
+      interval: 10s
+
+      timeout: 5s
+
+      retries: 10
+
+
+
+volumes:
+
+  mysql_data:
