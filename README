@@ -29,6 +29,30 @@ La aplicación fue desarrollada utilizando Node.js, Express, Prisma ORM, MySQL y
 
 ---
 
+# Estructura del Proyecto
+
+```text
+Backend_AI-Natural_Hecho_En_Casa/
+
+├── README.md
+├── .gitignore
+│
+├── backend/
+│   ├── .dockerignore
+│   ├── .env
+│   ├── Dockerfile
+│   ├── docker-compose.yml
+│   ├── package.json
+│   ├── package-lock.json
+│   ├── backups/
+│   ├── logs/
+│   ├── prisma/
+│   ├── scripts/
+│   └── src/
+```
+
+---
+
 # Requisitos Previos
 
 Antes de ejecutar el proyecto es necesario instalar:
@@ -89,7 +113,7 @@ docker compose version
 
 Docker Desktop debe permanecer iniciado antes de levantar el proyecto.
 
-Verificar que Docker esté funcionando:
+Verificar funcionamiento:
 
 ```bash
 docker ps
@@ -123,7 +147,7 @@ sudo systemctl start docker
 
 ---
 
-## 4. Habilitar Inicio Automático Docker
+## 4. Habilitar Inicio Automático
 
 ```bash
 sudo systemctl enable docker
@@ -151,7 +175,7 @@ docker compose version
 sudo systemctl status docker
 ```
 
-En Linux no es necesario mantener una aplicación gráfica abierta como Docker Desktop. Docker funciona como servicio del sistema.
+En Linux Docker funciona como servicio del sistema y no requiere Docker Desktop.
 
 ---
 
@@ -184,6 +208,16 @@ Docker Desktop debe permanecer iniciado antes de ejecutar el proyecto.
 ```bash
 git clone URL_REPOSITORIO
 
+cd Backend_AI-Natural_Hecho_En_Casa
+```
+
+---
+
+# IMPORTANTE
+
+Todos los comandos relacionados con Docker, npm y backups deben ejecutarse dentro de la carpeta:
+
+```bash
 cd backend
 ```
 
@@ -191,7 +225,7 @@ cd backend
 
 # Levantar Proyecto
 
-Construir e iniciar el sistema:
+Desde la carpeta `backend/` ejecutar:
 
 ```bash
 docker compose up -d --build
@@ -256,7 +290,7 @@ http://localhost:3000/health
 Las configuraciones principales del sistema se encuentran en:
 
 ```text
-.env
+backend/.env
 ```
 
 Variables importantes:
@@ -274,6 +308,8 @@ Variables importantes:
 # Sistema de Backups
 
 ## Generar Backup Manual
+
+Desde `backend/` ejecutar:
 
 ```bash
 npm run backup
@@ -329,23 +365,6 @@ Archivos principales:
 ```text
 combined.log
 error.log
-```
-
----
-
-# Estructura Principal
-
-```text
-backend/
-
-├── backups/
-├── logs/
-├── prisma/
-├── scripts/
-├── src/
-├── docker-compose.yml
-├── Dockerfile
-├── package.json
 ```
 
 ---
@@ -477,6 +496,7 @@ El backend actualmente incorpora:
 
 - En Windows y MacOS Docker Desktop debe permanecer iniciado.
 - En Linux Docker funciona como servicio del sistema.
+- Todos los comandos deben ejecutarse dentro de `backend/`.
 - El sistema inicializa automáticamente Prisma y MySQL.
 - El seed inicial se ejecuta automáticamente si la base de datos está vacía.
 - Los backups se generan comprimidos utilizando `.sql.gz`.
