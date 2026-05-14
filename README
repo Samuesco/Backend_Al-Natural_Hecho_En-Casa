@@ -231,6 +231,15 @@ Desde la carpeta `backend/` ejecutar:
 docker compose up -d --build
 ```
 
+Durante la inicialización automática el sistema:
+
+- espera disponibilidad de MySQL
+- genera Prisma Client
+- sincroniza el schema Prisma
+- ejecuta automáticamente procedimientos SQL
+- ejecuta seed inteligente
+- inicia automáticamente el backend
+
 ---
 
 # Verificar Contenedores
@@ -349,6 +358,8 @@ Utilizando:
 - node-cron
 - mysqldump
 - gzip
+
+Los backups son almacenados utilizando archivos comprimidos `.sql.gz` para optimizar espacio y facilitar futuras restauraciones o transferencias.
 
 ---
 
@@ -498,7 +509,9 @@ El backend actualmente incorpora:
 - En Linux Docker funciona como servicio del sistema.
 - Todos los comandos deben ejecutarse dentro de `backend/`.
 - El sistema inicializa automáticamente Prisma y MySQL.
-- El seed inicial se ejecuta automáticamente si la base de datos está vacía.
+- El sistema ejecuta automáticamente procedimientos SQL durante cada inicialización.
+- El seed se ejecuta automáticamente durante cada arranque del backend.
+- El seed valida previamente información crítica para evitar duplicación de datos.
 - Los backups se generan comprimidos utilizando `.sql.gz`.
 - El backend fue diseñado para facilitar continuidad futura del proyecto.
 
