@@ -1,0 +1,4 @@
+[2026-05-24T22:19:58.228Z] INFO: Generando backup manual...
+[2026-05-24T22:19:58.570Z] INFO: Backup manual completado
+[2026-05-24T22:23:36.578Z] INFO: Restaurando backup: 2026-05-24_backup.sql.gz
+[2026-05-24T22:23:37.429Z] INFO: Backup restaurado: 2026-05-24_backup.sql.gz

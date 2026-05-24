@@ -146,7 +146,11 @@ router.post(
 |
 | DESCRIPCIÓN:
 | Retorna todos los backups disponibles almacenados
-| en el sistema.
+| en el sistema junto con:
+|
+| - Nombre del archivo
+| - Tamaño formateado automáticamente
+| - Fecha de creación
 |
 | AUTENTICACIÓN:
 | Requiere JWT válido.
@@ -161,13 +165,27 @@ router.post(
 |
 | {
 |   "ok": true,
+|   "total": 2,
 |   "data": [
 |     {
-|       "name": "2026-05-14_backup.sql.gz",
-|       "size_mb": "0.02",
-|       "created_at": "2026-05-14T16:30:00.000Z"
+|       "name": "2026-05-24_backup.sql.gz",
+|       "size": "24.81 KB",
+|       "created_at": "2026-05-24T22:30:00.000Z"
 |     }
 |   ]
+| }
+|
+| FORMATO TAMAÑOS:
+|
+| - Bytes (B)
+| - Kilobytes (KB)
+| - Megabytes (MB)
+|
+| JSON ERROR:
+|
+| {
+|   "ok": false,
+|   "message": "Error obteniendo backups"
 | }
 |
 |--------------------------------------------------------------------------
@@ -188,6 +206,8 @@ router.get(
                 return res.status(200).json({
 
                     ok: true,
+
+                    total: 0,
 
                     data: []
 
@@ -217,25 +237,51 @@ router.get(
 
                     const stats = fs.statSync(filePath);
 
+                    let size = '';
+
+                    if (stats.size < 1024) {
+
+                        size = `${stats.size} B`;
+
+                    }
+
+                    else if (
+
+                        stats.size < 1024 * 1024
+
+                    ) {
+
+                        size = `${(
+
+                            stats.size / 1024
+
+                        ).toFixed(2)} KB`;
+
+                    }
+
+                    else {
+
+                        size = `${(
+
+                            stats.size
+
+                            /
+
+                            1024
+
+                            /
+
+                            1024
+
+                        ).toFixed(2)} MB`;
+
+                    }
+
                     return {
 
                         name: file,
 
-                        size_mb:
-
-                            (
-
-                                stats.size
-
-                                /
-
-                                1024
-
-                                /
-
-                                1024
-
-                            ).toFixed(2),
+                        size,
 
                         created_at: stats.birthtime
 
@@ -259,13 +305,28 @@ router.get(
 
                 ok: true,
 
+                total: backups.length,
+
                 data: backups
 
             });
 
         } catch (error) {
 
-            next(error);
+            logger.error(
+
+                `Error listando backups: ${error.message}`
+
+            );
+
+            return res.status(500).json({
+
+                ok: false,
+
+                message:
+                    'Error obteniendo backups'
+
+            });
 
         }
 
